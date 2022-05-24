@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (requestQueue == null){
+        if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(getApplicationContext());
         }
     }
 
-    public void makeRequest(){
+    public void makeRequest() {
         String url = requestText.getText().toString();
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         println("응답 -> " + response);
+                        processResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -62,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
                         println("에러 -> " + error.getMessage());
                     }
                 }
-        ){
+        ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String,String>();
+                Map<String, String> params = new HashMap<String, String>();
                 return params;
             }
         };
@@ -75,7 +77,13 @@ public class MainActivity extends AppCompatActivity {
         println("요청보냄");
     }
 
-    public void println(String data){
+    public void println(String data) {
         responseText.append(data + "\n");
+    }
+
+    public void processResponse(String response) {
+        Gson gson = new Gson();
+        MovieList movieList = gson.fromJson(response, MovieList.class);
+        println("영화 정보의 수 : " + movieList.boxOfficeResult.dailyBoxOfficeList.size());
     }
 }
