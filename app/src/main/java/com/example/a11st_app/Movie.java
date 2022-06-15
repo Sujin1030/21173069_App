@@ -12,7 +12,7 @@ public class Movie {
     String saleShare;
     String salesChange;
     String saleAcc;
-    String audCnt;
+    String audiCnt;
     String audiInten;
     String audiChange;
     String audiAcc;
